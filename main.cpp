@@ -1,3 +1,9 @@
+/* main.cpp
+ * Driver for the Cheaters program
+ * Created by Dilya Anvarbekova and Teddy Hsieh
+ * Date Last Modified: 05/06/2020
+ */
+
 #include <sys/types.h>
 #include <dirent.h>
 #include <errno.h>
@@ -5,94 +11,84 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "files.h"
+#include "LinkedList.h"
+#include "HashMap.h"
 
 using namespace std;
-
-int getdir (string dir, vector<string> &files)
-{
-    DIR *dp;
-    struct dirent *dirp;
-    if((dp  = opendir(dir.c_str())) == NULL) {
-        cout << "Error(" << errno << ") opening " << dir << endl;
-        return errno;
-    }
-
-	int i = 0;
-    while ((dirp = readdir(dp)) != NULL) {
-		i++;
-		if(i > 2){
-   		//if(name.compare(".") != 0 && name.compare("..")
-			string name = string(dirp->d_name);
-			files.push_back(name);
-    	}
-	}
-
-    closedir(dp);
-    return 0;
-}
-
-/* Retrieve all sequences of size n from a string and store it
- * @param n number of words per sequences
- * @param in stream to the main body of text to retrieve from
- * @param &seq where sequences are to be stored
- */
-int makeSequences (int n, ifstream& in, vector<string> &seq)
-{
-	vector<string> words = vector<string>();
-	string s;
-	while(in){
-		in >> s;
-		words.push_back(s);
-	}
-
-	 
-	for(int i = 0; i < words.size() - n; i++){
-		string w;
-		for(int j = i; j < i + n; j++){
-			w += words[j] + " ";
-		}
-		//cout << w << endl;
-		seq.push_back(w);
-		//cout << "PUSHED\n";
-	}
-	
-}
 
 
 int main(int argc, char* argv[])
 {
-    string dir = argv[1];
-	int n = std::stoi(argv[2]);
-    vector<string> files = vector<string>();
+////    string dir = argv[1];
+////    int n = std::stoi(argv[2]);
+//
 
-    getdir(dir, files);
 
-/*	//TEST READING FILE NAMES
-    for (unsigned int i = 0;i < files.size();i++) {
-        cout << i << ":  " << files[i] << endl;
+////****************************************************************************////
+//// Needed for testing on CLion, will change back for Linux testing
+//    string dir = string("sm_doc_set");
+//    int n = 6;
+////***************************************************************************////
+
+//    vector<string> files = vector<string>();
+//
+//    getDir(dir, files);
+//
+//	//TEST READING FILE NAMES
+////    for (unsigned int i = 0;i < files.size();i++) {
+////        cout << i << ":  " << files[i] << endl;
+////    }
+//
+//    vector <vector <string> > seq;
+//    for(int i = 0; i < 1; i++){//files.size(); i++){
+//        vector<string> currSeq;
+//        ifstream in;
+//
+//        in.open((dir +'/'+ files[i]));
+////        in.open(files[i].c_str());
+//
+//        cout << "opening file: " << files[i] << endl;
+//        if(!in.is_open())
+//            cout << "Failed to open.\n";
+//
+//        makeSequences(n, in, currSeq);
+//        seq.push_back(currSeq);
+//        in.close();
+//    }
+//
+//    //test first file
+//    for(int i = 0; i < seq[0].size(); i++){
+//        cout << seq[0][i] << endl;
+//    }
+
+
+////****************************************************************************////
+// Testing Linked List and Hash Map
+////***************************************************************************////
+
+    int nums[16] = {0,1,2,3,4,5,6,7,8,9,9,9,8,7,5,3};
+    LinkedList myList = LinkedList();
+    for (int i = 0; i < 10; i++){
+        myList.push(i);
     }
-*/
-	vector<vector<string>> seq = vector<vector<string>>();
-	for(int i = 0; i < 1; i++){//files.size(); i++){
-		vector<string> currSeq  = vector<string>();
-		ifstream in;
+    myList.showList();
+    cout << "Head: " << myList.getHead() << endl;
+    cout << "Tail: " << myList.getTail() << endl;
 
-		in.open(dir+files[i]);
-		if(!in.is_open())
-			cout << "Failed to open.\n";
+    cout << "Testing Hash Map to see if its okay" << endl;
 
-		makeSequences(n, in, currSeq);
-		seq.push_back(currSeq);
-		in.close();
-	}
+    HashMap myMap = HashMap(10);
+    string str = "a";
+    for (int i = 0; i < 16; i++){
+        myMap.hash(nums[i], str);
+        str += "a";
+    }
 
-	//test first file
-	for(int i = 0; i < seq[0].size(); i++)
-	{
-		cout << seq[0][i] << endl;
- 	}
+    myMap.showMap();
 
-	return 0;
+
+    return 0;
 }
 
 
