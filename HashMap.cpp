@@ -34,9 +34,9 @@ int HashMap::hashFunction(string phrase) {
     int hashVal = 0;
     int pow = 1;
     int c;
-    for(char i : phrase){
-        if(isalnum(i)){
-            c = toupper(i);
+    for(int i = 0; i < phrase.length(); i++){
+        if(isalnum(phrase[i])){
+            c = toupper(phrase[i]);
             hashVal = (hashVal + (c - int('0') + 1) * pow) % BOUNDS;
             pow = (pow * MULT) % BOUNDS;
         }
@@ -56,5 +56,10 @@ void HashMap::showMap() {
 }
 
 HashMap::~HashMap() {
+    for(int i = 0; i < mapSize; i++){
+        if(!table[i].isEmpty()){
+            table[i].deleteList();
+        }
+    }
     delete [] table;
 }

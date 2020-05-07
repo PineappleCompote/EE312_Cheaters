@@ -13,7 +13,6 @@
 #include <fstream>
 #include "files.h"
 #include <utility>
-#include "LinkedList.h"
 #include "HashMap.h"
 #include<bits/stdc++.h>
 
@@ -26,32 +25,48 @@ int main(int argc, char* argv[])
 //********************************************************************************
 // To use on Linux servers
 //
-//    string dir = argv[1];
-//    int n = std::stoi(argv[2]);
-//    int threshold = std::stoi(argv[3]);
-//********************************************************************************
+    string dir = argv[1];
+    int n = std::stoi(argv[2]);
+    int threshold = std::stoi(argv[3]);
+////********************************************************************************
 
 
 //****************************************************************************////
 // Needed for testing on CLion, will change back for Linux testing
-    string dir = string("big_doc_set");
-    int n = 6;
-    int threshold = 200;
+//    string dir = string("big_doc_set");
+//    int n = 6;
+//    int threshold = 200;
 //***************************************************************************////
-
+    if(dir[dir.length()-1] != '/'){
+        dir += '/';
+    }
     vector<string> files = vector<string>();
 
     getDir(dir, files);
     int max = files.size();
 
+    int hashMapSize;
+    if(max < 50){
+        hashMapSize = 51059;
+    }
+    else if(max >= 50 && max < 500){
+        hashMapSize = 257281;
+    }
+    else if(max >= 500 && max < 1000){
+        hashMapSize = 513067;
+    }
+    else{
+        hashMapSize = 1055113;
+    }
+
     vector <vector <int> > collisionTable(max, vector <int> (max, 0));
 
-    HashMap myMap = HashMap(1153199);
+    HashMap myMap = HashMap(hashMapSize);
 
     for(int i = 0; i < max; i++){
         ifstream in;
 
-        in.open((dir +'/'+ files[i]));
+        in.open((dir + files[i]));
 
         if(!in.is_open())
             cout << "Failed to open.\n";
@@ -61,7 +76,7 @@ int main(int argc, char* argv[])
         in.close();
     }
 
-    for (int i = 0; i < 1153199; i++){
+    for (int i = 0; i < hashMapSize; i++){
         countCollisions(i, collisionTable, myMap);
     }
 
@@ -70,19 +85,19 @@ int main(int argc, char* argv[])
 
     for(int i = 1; i < max; i++){
         for(int j = 0; j < i; j++){
-            collisions.emplace_back(collisionTable[i][j], make_pair(j, i));
+            if(collisionTable[i][j] >= threshold){
+                collisions.emplace_back(collisionTable[i][j], make_pair(j, i));
+            }
         }
     }
 
-    sort(collisions.begin(), collisions.end(), greater<>());
+    int vectSize = collisions.size();
+    sortList(collisions);
 
-    int i = 0;
-    while(collisions[i].first > threshold){
+    for(int i = 0; i < vectSize; i++){
         cout << collisions[i].first << ": " << files[collisions[i].second.first] << ", " << files[collisions[i].second.second] << endl;
-        i++;
     }
 
-//TODO: Fix the hash table size - find a good way to decide on the size
 //TODO: Get command line arguments and check if it works on Linux
 //TODO: write the makefile
 

@@ -88,6 +88,7 @@ public:
     int getSize();
 
 
+    void deleteList();
 /* Destructor - Clears memory
  * Inputs:
  *      - None

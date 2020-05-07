@@ -19,13 +19,13 @@ Node* LinkedList::getTail() {
 }
 
 bool LinkedList::isEmpty() {
-    return head == nullptr;
+    return head == NULL;
 }
 
 void LinkedList::push(int data) {
     Node* temp = new Node;
     temp->data = data;
-    temp->next = nullptr;
+    temp->next = NULL;
 
     if(isEmpty()){
         head = temp;
@@ -44,7 +44,7 @@ void LinkedList::showList() {
     }
     else{
         Node *curr = head;
-        while (curr != nullptr){
+        while (curr != NULL){
             cout << curr->data << "  ";
             curr = curr->next;
         }
@@ -56,12 +56,16 @@ int LinkedList::getSize() {
     return size;
 }
 
-LinkedList::~LinkedList() {
-    Node *prev;
-    Node *curr = head;
-    while(curr != nullptr){
-        prev = curr;
-        curr = curr->next;
-        delete prev;
+void LinkedList::deleteList() {
+    Node *current = getHead();
+    Node *next;
+
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
     }
+}
+
+LinkedList::~LinkedList(){
 }

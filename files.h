@@ -44,8 +44,28 @@ int getDir (string dir, vector<string> &files);
  */
 int hashIntoTable (int n, ifstream& in, int fileIdx, HashMap &myMap, vector <vector <int> > &table);
 
-
+/*
+ * int countCollisions(int idx, vector <vector <int> > &table, HashMap &myMap)
+ * Goes through the hash table and logs all collisions
+ * Inputs:
+ *      - idx: index of the hash table to check
+ *      - table: 2D vector to store the collision counts
+ *      - myMap: hash map to check
+ * Outputs:
+ *      - None, just updates the table of collisions
+ */
 int countCollisions(int idx, vector <vector <int> > &table, HashMap &myMap);
+
+
+/*
+ * void sortList(vector< pair< int, pair<int, int> > > &collisions)
+ * Sorts the list of collisions in descending order using selection sort
+ * Inputs:
+ *      - collisions: vector of all collisions
+ * Outputs:
+ *      - None, just sorts it in place
+ */
+void sortList(vector< pair< int, pair<int, int> > > &collisions);
 
 #endif //CHEATERS_FILES_H
 

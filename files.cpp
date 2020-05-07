@@ -18,13 +18,13 @@ int getDir (string dir, vector<string> &files)
 {
     DIR *dp;
     struct dirent *dirp;
-    if((dp  = opendir(dir.c_str())) == nullptr) {
+    if((dp  = opendir(dir.c_str())) == NULL) {
         cout << "Error(" << errno << ") opening " << dir << endl;
         return errno;
     }
 
     int i = 0;
-    while ((dirp = readdir(dp)) != nullptr) {
+    while ((dirp = readdir(dp)) != NULL) {
         i++;
         if(i > 2){
             //if(name.compare(".") != 0 && name.compare("..")
@@ -68,12 +68,25 @@ int countCollisions(int idx, vector< vector <int> > &table, HashMap &myMap){
         Node* curr;
         while(prev != myList.getTail()){
             curr = prev->next;
-            while(curr != nullptr){
+            while(curr != NULL){
                 table[prev->data][curr->data] += 1;
                 curr = curr->next;
             }
             prev = prev->next;
         }
+    }
+}
+
+void sortList(vector< pair< int, pair<int, int> > > &collisions){
+    int maxIdx;
+    for( int i = 0; i < collisions.size()-1; i++){
+        maxIdx = i;
+        for( int j = i + 1; j < collisions.size(); j++){
+            if(collisions[j].first > collisions[maxIdx].first){
+                maxIdx = j;
+            }
+        }
+        swap(collisions[maxIdx], collisions[i]);
     }
 }
 
