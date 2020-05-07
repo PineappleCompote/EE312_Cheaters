@@ -15,6 +15,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "HashMap.h"
 
 using namespace std;
 
@@ -30,12 +31,21 @@ using namespace std;
 
 int getDir (string dir, vector<string> &files);
 
-/* Retrieve all sequences of size n from a string and store it
- * @param n number of words per sequences
- * @param in stream to the main body of text to retrieve from
- * @param &seq where sequences are to be stored
+/*
+ * int hashIntoTable (int n, ifstream& in, int fileIdx, HashMap &myMap)
+ * Retrieves all sequences from a file and hashes it into the hash map
+ * Inputs:
+ *      - n: size of the sequences
+ *      - in: file stream
+ *      - fileIdx: index of the file to store in the hash map
+ *      - myMap: hash map to store the file indices in
+ * Outputs:
+ *      - file index hashed into the hash map using the sequences as the key
  */
-int makeSequences (int n, ifstream& in, vector<string> &seq);
+int hashIntoTable (int n, ifstream& in, int fileIdx, HashMap &myMap, vector <vector <int> > &table);
+
+
+int countCollisions(int idx, vector <vector <int> > &table, HashMap &myMap);
 
 #endif //CHEATERS_FILES_H
 

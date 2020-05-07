@@ -10,22 +10,22 @@
 
 using namespace std;
 
-int LinkedList::getHead() {
-    return head->data;
+Node *LinkedList::getHead() {
+    return head;
 }
 
-int LinkedList::getTail() {
-    return tail->data;
+Node* LinkedList::getTail() {
+    return tail;
 }
 
 bool LinkedList::isEmpty() {
-    return head == NULL;
+    return head == nullptr;
 }
 
 void LinkedList::push(int data) {
-    Node *temp = new Node;
+    Node* temp = new Node;
     temp->data = data;
-    temp->next = NULL;
+    temp->next = nullptr;
 
     if(isEmpty()){
         head = temp;
@@ -35,6 +35,7 @@ void LinkedList::push(int data) {
         temp->next = head;
         head = temp;
     }
+    size += 1;
 }
 
 void LinkedList::showList() {
@@ -43,18 +44,22 @@ void LinkedList::showList() {
     }
     else{
         Node *curr = head;
-        while (curr != NULL){
-            cout << curr->data << endl;
+        while (curr != nullptr){
+            cout << curr->data << "  ";
             curr = curr->next;
         }
+        cout << endl;
     }
 }
 
+int LinkedList::getSize() {
+    return size;
+}
 
 LinkedList::~LinkedList() {
     Node *prev;
     Node *curr = head;
-    while(curr != NULL){
+    while(curr != nullptr){
         prev = curr;
         curr = curr->next;
         delete prev;

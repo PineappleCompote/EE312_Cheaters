@@ -12,19 +12,19 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-
+#include "HashMap.h"
 
 int getDir (string dir, vector<string> &files)
 {
     DIR *dp;
     struct dirent *dirp;
-    if((dp  = opendir(dir.c_str())) == NULL) {
+    if((dp  = opendir(dir.c_str())) == nullptr) {
         cout << "Error(" << errno << ") opening " << dir << endl;
         return errno;
     }
 
     int i = 0;
-    while ((dirp = readdir(dp)) != NULL) {
+    while ((dirp = readdir(dp)) != nullptr) {
         i++;
         if(i > 2){
             //if(name.compare(".") != 0 && name.compare("..")
@@ -37,20 +37,43 @@ int getDir (string dir, vector<string> &files)
     return 0;
 }
 
-int makeSequences (int n, ifstream& in, vector<string> &seq){
+int hashIntoTable(int n, ifstream& in, int fileIdx, HashMap &myMap, vector <vector <int> > &table){
+    // s is one word
     vector<string> words = vector<string>();
     string s;
+    string str;
+    int count = 0;
     while(in){
         in >> s;
-        words.push_back(s);
-    }
-
-    for(int i = 0; i < words.size() - n; i++){
-        string w;
-        for(int j = i; j < i + n; j++){
-            w += words[j] + " ";
+        if (count < n){
+            words.push_back(s);
+            count += 1;
         }
-        seq.push_back(w);
+        else{
+            str = "";
+            for (int i = 0; i < n; i++){
+                str += words[i] + " ";
+            }
+            myMap.hash(fileIdx, str);
+            words.erase(words.begin());
+            words.push_back(s);
+        }
     }
-
 }
+
+int countCollisions(int idx, vector< vector <int> > &table, HashMap &myMap){
+    LinkedList myList = myMap.getList(idx);
+    if(myList.getSize() > 1){
+        Node* prev = myList.getHead();
+        Node* curr;
+        while(prev != myList.getTail()){
+            curr = prev->next;
+            while(curr != nullptr){
+                table[prev->data][curr->data] += 1;
+                curr = curr->next;
+            }
+            prev = prev->next;
+        }
+    }
+}
+

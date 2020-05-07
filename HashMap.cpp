@@ -1,7 +1,7 @@
 /* HashMap.cpp
  * Defines methods of the HashMap class
  * Created by Dilya Anvarbekova and Teddy Hsieh
- * Date Last Modfied: 05/06/2020
+ * Date Last Modified: 05/06/2020
  */
 
 #include "HashMap.h"
@@ -22,15 +22,30 @@ HashMap::HashMap(int size) {
     table = new LinkedList[mapSize];
 }
 
-void HashMap::hash(int fileIdx, string phrase) {
+int HashMap::hash(int fileIdx, string phrase) {
     int idx = hashFunction(phrase) % mapSize;
-    if (table[idx].isEmpty() || (table[idx].getHead() != fileIdx)){
+    if (table[idx].isEmpty() || ((table[idx].getHead()->data) != fileIdx)){
         table[idx].push(fileIdx);
     }
+    return idx;
 }
 
 int HashMap::hashFunction(string phrase) {
-    return phrase.length();
+    int hashVal = 0;
+    int pow = 1;
+    int c;
+    for(char i : phrase){
+        if(isalnum(i)){
+            c = toupper(i);
+            hashVal = (hashVal + (c - int('0') + 1) * pow) % BOUNDS;
+            pow = (pow * MULT) % BOUNDS;
+        }
+    }
+    return hashVal;
+}
+
+LinkedList HashMap::getList(int idx){
+    return table[idx];
 }
 
 void HashMap::showMap() {
@@ -41,4 +56,5 @@ void HashMap::showMap() {
 }
 
 HashMap::~HashMap() {
+    delete [] table;
 }

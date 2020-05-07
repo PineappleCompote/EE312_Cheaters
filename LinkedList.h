@@ -21,11 +21,13 @@ class LinkedList {
 private:
     Node *head;
     Node *tail;
+    int size;
 
 public:
     LinkedList(){
         head = NULL;
         tail = NULL;
+        size = 0;
     }
 
 /* Returns the value stored at the head of the list
@@ -34,7 +36,7 @@ public:
  * Outputs:
  *      - Integer value of the data at the head of the list
  */
-    int getHead();
+    Node *getHead();
 
 
 /* Returns the value stored at the tail of the list
@@ -43,7 +45,7 @@ public:
  * Outputs:
  *      - Integer value of the data at the tail of the list
  */
-    int getTail();
+    Node * getTail();
 
 
 /* Checks if the list is empty
@@ -74,6 +76,16 @@ public:
  *      - Prints data values in the reverse order they were added
  */
     void showList();
+
+
+/* Returns the size of the linked list
+ * FOR DEBUGGING
+ * Inputs:
+ *      - None
+ * Outputs:
+ *      - Returns the size of the list
+ */
+    int getSize();
 
 
 /* Destructor - Clears memory

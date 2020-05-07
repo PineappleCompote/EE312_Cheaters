@@ -12,81 +12,79 @@
 #include <iostream>
 #include <fstream>
 #include "files.h"
+#include <utility>
 #include "LinkedList.h"
 #include "HashMap.h"
+#include<bits/stdc++.h>
+
 
 using namespace std;
 
 
 int main(int argc, char* argv[])
 {
-////    string dir = argv[1];
-////    int n = std::stoi(argv[2]);
+//********************************************************************************
+// To use on Linux servers
 //
+//    string dir = argv[1];
+//    int n = std::stoi(argv[2]);
+//    int threshold = std::stoi(argv[3]);
+//********************************************************************************
 
 
-////****************************************************************************////
-//// Needed for testing on CLion, will change back for Linux testing
-//    string dir = string("sm_doc_set");
-//    int n = 6;
-////***************************************************************************////
+//****************************************************************************////
+// Needed for testing on CLion, will change back for Linux testing
+    string dir = string("big_doc_set");
+    int n = 6;
+    int threshold = 200;
+//***************************************************************************////
 
-//    vector<string> files = vector<string>();
-//
-//    getDir(dir, files);
-//
-//	//TEST READING FILE NAMES
-////    for (unsigned int i = 0;i < files.size();i++) {
-////        cout << i << ":  " << files[i] << endl;
-////    }
-//
-//    vector <vector <string> > seq;
-//    for(int i = 0; i < 1; i++){//files.size(); i++){
-//        vector<string> currSeq;
-//        ifstream in;
-//
-//        in.open((dir +'/'+ files[i]));
-////        in.open(files[i].c_str());
-//
-//        cout << "opening file: " << files[i] << endl;
-//        if(!in.is_open())
-//            cout << "Failed to open.\n";
-//
-//        makeSequences(n, in, currSeq);
-//        seq.push_back(currSeq);
-//        in.close();
-//    }
-//
-//    //test first file
-//    for(int i = 0; i < seq[0].size(); i++){
-//        cout << seq[0][i] << endl;
-//    }
+    vector<string> files = vector<string>();
 
+    getDir(dir, files);
+    int max = files.size();
 
-////****************************************************************************////
-// Testing Linked List and Hash Map
-////***************************************************************************////
+    vector <vector <int> > collisionTable(max, vector <int> (max, 0));
 
-    int nums[16] = {0,1,2,3,4,5,6,7,8,9,9,9,8,7,5,3};
-    LinkedList myList = LinkedList();
-    for (int i = 0; i < 10; i++){
-        myList.push(i);
-    }
-    myList.showList();
-    cout << "Head: " << myList.getHead() << endl;
-    cout << "Tail: " << myList.getTail() << endl;
+    HashMap myMap = HashMap(1153199);
 
-    cout << "Testing Hash Map to see if its okay" << endl;
+    for(int i = 0; i < max; i++){
+        ifstream in;
 
-    HashMap myMap = HashMap(10);
-    string str = "a";
-    for (int i = 0; i < 16; i++){
-        myMap.hash(nums[i], str);
-        str += "a";
+        in.open((dir +'/'+ files[i]));
+
+        if(!in.is_open())
+            cout << "Failed to open.\n";
+
+        hashIntoTable(n, in, i, myMap, collisionTable);
+
+        in.close();
     }
 
-    myMap.showMap();
+    for (int i = 0; i < 1153199; i++){
+        countCollisions(i, collisionTable, myMap);
+    }
 
+    vector<vector<int> > allCollisions;
+    vector< pair< int, pair<int, int> > > collisions;
+
+    for(int i = 1; i < max; i++){
+        for(int j = 0; j < i; j++){
+            collisions.emplace_back(collisionTable[i][j], make_pair(j, i));
+        }
+    }
+
+    sort(collisions.begin(), collisions.end(), greater<>());
+
+    int i = 0;
+    while(collisions[i].first > threshold){
+        cout << collisions[i].first << ": " << files[collisions[i].second.first] << ", " << files[collisions[i].second.second] << endl;
+        i++;
+    }
+
+//TODO: Fix the hash table size - find a good way to decide on the size
+//TODO: Get command line arguments and check if it works on Linux
+//TODO: write the makefile
 
     return 0;
 }

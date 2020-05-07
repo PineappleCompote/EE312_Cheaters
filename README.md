@@ -1,4 +1,4 @@
-# EE312_Cheaters
+EE312_Cheaters
 
 To compile the files:
 	1. Go to the directory with all the files

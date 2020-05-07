@@ -19,6 +19,8 @@ class HashMap {
 private:
     static const int MAX_SIZE = 1000000;
     static const int NOT_FOUND = -1;
+    static const int MULT = 41;
+    static const int BOUNDS = 1e7 + 9;
 
     LinkedList *table;
     int mapSize;
@@ -37,7 +39,7 @@ public:
  * Outputs:
  *      - index to hash the phrase to
  */
-    int hashFunction(string phrase);
+    static int hashFunction(string phrase);
 
 
 /* Entering a value into the hash table
@@ -48,7 +50,7 @@ public:
  *      - None
  *      - The index of the file is hashed into the table if it wasn't hashed to the same place before
  */
-    void hash(int fileIdx, string phrase);
+    int hash(int fileIdx, string phrase);
 
 
 /* Shows the hash map and which values are stored at each table index
@@ -56,6 +58,8 @@ public:
  */
     void showMap();
 
+
+    LinkedList getList(int idx);
 
 /* Destructor
  */
